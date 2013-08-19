@@ -21,19 +21,9 @@
 			<portlet:param name="showView" value="showEditBookmark" />
 		</portlet:renderURL>
 		
-		<div class="bookmark-controls-main clearfix">
-			<a class="rp-link-button rp-link-button-alt" href="${showAddBookmarkUrl}">L&auml;gg till nytt bokm&auml;rke</a>
-			
-			<%-- 
-			<portlet:actionURL name="addDummyBookmarks" var="addDummyBookmarksUrl">
-				<portlet:param name="action" value="addDummyBookmarks" />
-				<portlet:param name="numberOfBookmarks" value="10" />
-			</portlet:actionURL>		
-			<a class="rp-link-button" href="${addDummyBookmarksUrl}">Add dummy bookmarks</a>
-			--%>
+		<div class="rp-bookmark-hd clearfix">
+			<h2>Startsida intra</h2>
 		</div>
-		
-		<h2>Startsida intra</h2>
 		<c:choose>
 			<c:when test="${not empty vgrBookmarks}">
 				<ul class="rp-bookmark-list">
@@ -66,7 +56,11 @@
 			</c:otherwise>
 		</c:choose>		
 		
-		<h2>Egna bokm&auml;rken</h2>	
+		<div class="rp-bookmark-hd clearfix">
+			<h2>Egna bokm&auml;rken</h2>
+			<a class="rp-link-button rp-link-button-alt" href="${showAddBookmarkUrl}">L&auml;gg till nytt bokm&auml;rke</a>
+		</div>
+			
 		<c:choose>
 			<c:when test="${not empty customBookmarks}">
 				<ul class="rp-bookmark-list">
@@ -87,22 +81,22 @@
 								<a class="rp-bookmark-title-toggle" href="#">Toggle </a>
 								<a class="rp-bookmark-title" href="${bookmark.url}" target="_BLANK">${bookmark.title}</a>
 							</div>
-							<div class="rp-bookmark-controls clearfix">
-
-								<portlet:renderURL var="showEditBookmarkUrl">
-									<portlet:param name="showView" value="showEditBookmark" />
-									<portlet:param name="bookmarkId" value="${bookmark.id}" />
-								</portlet:renderURL>
-							
-								<portlet:actionURL name="deleteBookmark" var="deleteBookmarkUrl">
-									<portlet:param name="action" value="deleteBookmark" />
-									<portlet:param name="bookmarkId" value="${bookmark.id}" />
-								</portlet:actionURL>
-								
-								<a href="${showEditBookmarkUrl}" class="rp-bookmark-edit" title="Redigera">Redigera</a>
-								<a href="${deleteBookmarkUrl}" class="rp-bookmark-delete requires-confirmation" title="Ta bort" data-confirm-msg="&Auml;r du s&auml;ker p&aring; att du vill ta bort detta bokm&auml;rke?">Ta bort</a>
-							</div>
 							<div class="rp-bookmark-more-info">
+								<div class="rp-bookmark-controls clearfix">
+	
+									<portlet:renderURL var="showEditBookmarkUrl">
+										<portlet:param name="showView" value="showEditBookmark" />
+										<portlet:param name="bookmarkId" value="${bookmark.id}" />
+									</portlet:renderURL>
+								
+									<portlet:actionURL name="deleteBookmark" var="deleteBookmarkUrl">
+										<portlet:param name="action" value="deleteBookmark" />
+										<portlet:param name="bookmarkId" value="${bookmark.id}" />
+									</portlet:actionURL>
+									
+									<a href="${showEditBookmarkUrl}" class="rp-bookmark-edit" title="Redigera">Redigera</a>
+									<a href="${deleteBookmarkUrl}" class="rp-bookmark-delete requires-confirmation" title="Ta bort" data-confirm-msg="&Auml;r du s&auml;ker p&aring; att du vill ta bort detta bokm&auml;rke?">Ta bort</a>
+								</div>
 								<p>${bookmark.url}</p>
 								<p>${bookmark.description}</p>
 							</div>
