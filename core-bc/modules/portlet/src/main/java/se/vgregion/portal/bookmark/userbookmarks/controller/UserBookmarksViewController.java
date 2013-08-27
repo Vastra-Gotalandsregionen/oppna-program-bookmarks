@@ -155,6 +155,10 @@ public class UserBookmarksViewController {
         
         long bookmarkId = ParamUtil.getLong(request, "bookmarkId", 0);
         
+        // Check http
+        if(!url.startsWith("http")) {
+        	url = "http://" + url;
+        }
         
         if(bookmarkId == 0) {
             Bookmark bookmark = new Bookmark(companyId, groupId, userId, title, url, description);
