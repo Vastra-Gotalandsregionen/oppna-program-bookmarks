@@ -46,7 +46,7 @@
 							</div>
 							<div class="rp-bookmark-more-info">
 								<p>${bookmark.url}</p>
-								<p>${bookmark.description}</p>
+								<p>L&auml;nk till intran&auml;t - h&auml;mtad fr&aring;n Katalog i V&auml;st utifr&aring;n din anst&auml;llning.</p>
 							</div>
 						</li>
 					</c:forEach>
