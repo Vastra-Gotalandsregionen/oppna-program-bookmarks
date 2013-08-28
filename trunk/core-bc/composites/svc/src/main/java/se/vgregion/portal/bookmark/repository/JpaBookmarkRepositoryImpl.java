@@ -168,18 +168,12 @@ public class JpaBookmarkRepositoryImpl extends DefaultJpaRepository<Bookmark, Lo
         return bookmarks;
     }
     
-    
-    
-    
-    
-    
     @Override
     public void remove(long bookmarkId) {
         
         Bookmark bookmark = find(bookmarkId);
         
         remove(bookmark);
-        
     }
 
     private List<Bookmark> findByPagedQuery(String queryString, Object[] queryObject, int firstResult, int maxResult) {
@@ -198,7 +192,6 @@ public class JpaBookmarkRepositoryImpl extends DefaultJpaRepository<Bookmark, Lo
         Number result = (Number) query.getSingleResult();
         
         return result.intValue();
-    	
     }
     
     private Query createQuery(String queryString, Object[] queryObject) {
