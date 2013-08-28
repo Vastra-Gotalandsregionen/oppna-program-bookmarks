@@ -120,40 +120,31 @@ public class BookmarkServiceImpl implements BookmarkService {
     	
     	ArrayList<Bookmark> vgrUserBookmarks = new ArrayList<Bookmark>();
     	
-    	try {
-			String[] intraUris =  ExpandoValueLocalServiceUtil.getData(companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME, BookmarkConstants.EXPANDO_COLUMN_VGR_LABELED_URI, userId, new String[0]);
+		String[] intraUris =  getIntraUris(companyId, userId);
+		
+		if(intraUris.length == 0) {
+			Bookmark bookmark = new Bookmark();
+			bookmark.setTitle(BookmarkConstants.URL_VGR_INTRA);
+			bookmark.setUrl(BookmarkConstants.URL_VGR_INTRA);
 			
-			if(intraUris.length == 0) {
+			vgrUserBookmarks.add(bookmark);
+		} else {
+			for(String intraUri : intraUris) {
+				
 				Bookmark bookmark = new Bookmark();
-				bookmark.setTitle(BookmarkConstants.URL_VGR_INTRA);
-				bookmark.setUrl(BookmarkConstants.URL_VGR_INTRA);
+				
+				if(intraUri.contains(BookmarkConstants.URL_VGR_INTRA_INSIDAN)) {
+					bookmark.setUrl(BookmarkConstants.URL_VGR_INTRA_AUTOLOGIN);
+				} else {
+					bookmark.setUrl(intraUri);
+				}
+				
+				bookmark.setTitle(intraUri);
 				
 				vgrUserBookmarks.add(bookmark);
-			} else {
-				for(String intraUri : intraUris) {
-					
-					Bookmark bookmark = new Bookmark();
-					
-					if(intraUri.contains(BookmarkConstants.URL_VGR_INTRA_INSIDAN)) {
-						bookmark.setUrl(BookmarkConstants.URL_VGR_INTRA_AUTOLOGIN);
-					} else {
-						bookmark.setUrl(intraUri);
-					}
-					
-					bookmark.setTitle(intraUri);
-					
-					vgrUserBookmarks.add(bookmark);
-				}
 			}
-			
-			
-		} catch (PortalException e) {
-			LOGGER.error(e.getMessage(), e);
-		} catch (SystemException e) {
-			LOGGER.error(e.getMessage(), e);
 		}
-    	
-    	
+			
     	return vgrUserBookmarks;
     }
     
@@ -179,6 +170,22 @@ public class BookmarkServiceImpl implements BookmarkService {
     	}
     	
     	return bookmark;
+    }
+    
+    protected String[] getIntraUris(long companyId, long userId) {
+    	
+    	try {
+			String[] intraUris =  ExpandoValueLocalServiceUtil.getData(
+					companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME, BookmarkConstants.EXPANDO_COLUMN_VGR_LABELED_URI, userId, new String[0]);
+			
+			return intraUris;
+		} catch (PortalException e) {
+			LOGGER.error(e.getMessage(), e);
+		} catch (SystemException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+    	
+    	return new String[0];
     }
 
 }
