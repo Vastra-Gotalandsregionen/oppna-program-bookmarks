@@ -52,7 +52,7 @@ public class UserBookmarksViewController {
     }    
 
     /**
-     * The default render method.
+     * The default render method - provides user bookmarks to the view
      *
      * @param request  the request
      * @param response the response
@@ -91,7 +91,7 @@ public class UserBookmarksViewController {
     }
     
     /**
-     * The show add bookmark render method.
+     * The show edit bookmark render method - will provide view with a Bookmark from the database if a valid bookmarkId is passed throught the request
      *
      * @param request  the request
      * @param response the response
@@ -99,7 +99,7 @@ public class UserBookmarksViewController {
      * @return the view
      */
     @RenderMapping(params = "showView=showEditBookmark")
-    public String showAddBookmark(RenderRequest request, RenderResponse response, final ModelMap model) {
+    public String showEditBookmark(RenderRequest request, RenderResponse response, final ModelMap model) {
 
     	ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         long scopeGroupId = themeDisplay.getScopeGroupId();
@@ -121,21 +121,7 @@ public class UserBookmarksViewController {
     }
     
     /**
-     * Method handling Action request.
-     *
-     * @param request  the request
-     * @param response the response
-     * @param model    the model
-     */
-    @ActionMapping("someAction")
-    public final void someAction(ActionRequest request, ActionResponse response, final ModelMap model) {
-    	System.out.println("someAction");
-        LOGGER.info("someAction");
-        response.setRenderParameter("view", "view");
-    }
-    
-    /**
-     * Method handling Action request.
+     * Method handling Action request for adding or updating a bookmark
      *
      * @param request  the request
      * @param response the response
@@ -180,7 +166,7 @@ public class UserBookmarksViewController {
     }
     
     /**
-     * Method handling Action request.
+     * Method handling Action request for deleting a bookmark
      *
      * @param request  the request
      * @param response the response
@@ -194,55 +180,9 @@ public class UserBookmarksViewController {
         if(bookmarkId != 0) {
         	bookmarkService.deleteBookmark(bookmarkId);	
         }
-		
-        
-        response.setRenderParameter("showView", "");
-
-    }
-
-    
-    
-    /**
-     * Method handling Action request.
-     * Used from testing functionality in development phase
-     *
-     * @param request  the request
-     * @param response the response
-     * @param model    the model
-     */
-    @ActionMapping(params = "action=addDummyBookmarks")
-    public final void addDummyBookmarks(ActionRequest request, ActionResponse response, final ModelMap model) {
-    	
-    	System.out.println("addDummyBookmarks");
-
-        LOGGER.info("addDummyBookmarks");
-
-        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-        long companyId = themeDisplay.getCompanyId();
-        long groupId = themeDisplay.getScopeGroupId();
-        long userId = themeDisplay.getUserId();
-        
-        int numberOfBookmarks = ParamUtil.getInteger(request, "numberOfBookmarks", 10);
-        
-        for(int i = 0; i < numberOfBookmarks; i++) {
-        	String dateString = DateUtil.getCurrentDate("yyyy-MM-dd HH:mm:ss", themeDisplay.getLocale());
-        	String title = "Dummy bookmark " + dateString + " (" + i + ")";
-        	String url = "http://www.google.se";
-        	String description = "Lorem ipsum dolarem sit amet.";
-        	
-        	Bookmark bookmark = new Bookmark(companyId, groupId, userId, title, url, description);
-        	
-            try {
-    			bookmarkService.addBookmark(bookmark);
-    		} catch (CreateBookmarkException e) {
-    			LOGGER.error(e.getMessage(), e);
-    		}
-        }
         
         response.setRenderParameter("showView", "");
     }
-    
-    
 
 }
 

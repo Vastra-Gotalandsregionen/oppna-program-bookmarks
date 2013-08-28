@@ -96,6 +96,13 @@ Generation time : 2013-05-08 10:10:47 CEST
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
     </dependency>
+    
+    <dependency>
+		<artifactId>mockito-all</artifactId>
+		<groupId>org.mockito</groupId>
+		<scope>test</scope>
+	</dependency>    
+    
   </dependencies>
 
   <profiles>
