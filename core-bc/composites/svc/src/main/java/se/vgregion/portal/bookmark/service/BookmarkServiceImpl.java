@@ -3,6 +3,7 @@ package se.vgregion.portal.bookmark.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.liferay.portal.service.UserLocalServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import se.vgregion.portal.bookmark.exception.UpdateBookmarkException;
 import se.vgregion.portal.bookmark.repository.BookmarkRepository;
 
 /**
- * Implementation of {@link BookmarksService}.
+ * Implementation of {@link BookmarkService}.
  *
  * @author Erik Andersson
  * @company Monator Technologies AB
@@ -101,26 +102,26 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
     
     @Override
-    public int findUserBookmarksCount(long companyId, long groupId, long userId) {
-    	return bookmarkRepository.findUserBookmarksCount(companyId, groupId, userId);
+    public int findUserBookmarksCount(long companyId, long groupId, String screenName) {
+    	return bookmarkRepository.findUserBookmarksCount(companyId, groupId, screenName);
     }
     
     @Override
-    public List<Bookmark> findUserBookmarks(long companyId, long groupId, long userId) {
-    	return bookmarkRepository.findUserBookmarks(companyId, groupId, userId);
+    public List<Bookmark> findUserBookmarks(long id, long companyId, String screenName, long groupId) {
+    	return bookmarkRepository.findUserBookmarks(companyId, groupId, screenName);
     }
     
     @Override
-    public List<Bookmark> findUserBookmarks(long companyId, long groupId, long userId , int start, int offset) {
-    	return bookmarkRepository.findUserBookmarks(companyId, groupId, userId, start, offset);
+    public List<Bookmark> findUserBookmarks(long companyId, long groupId, String screenName , int start, int offset) {
+    	return bookmarkRepository.findUserBookmarks(companyId, groupId, screenName, start, offset);
     }
     
     @Override
-    public List<Bookmark> findVgrBookmarksForUser(long companyId, long userId) {
+    public List<Bookmark> findVgrBookmarksForUser(long companyId, String screenName) {
     	
     	ArrayList<Bookmark> vgrUserBookmarks = new ArrayList<Bookmark>();
     	
-		String[] intraUris =  getIntraUris(companyId, userId);
+		String[] intraUris =  getIntraUris(companyId, screenName);
 		
 		if(intraUris.length == 0) {
 			Bookmark bookmark = new Bookmark();
@@ -172,11 +173,17 @@ public class BookmarkServiceImpl implements BookmarkService {
     	return bookmark;
     }
     
-    protected String[] getIntraUris(long companyId, long userId) {
-    	
-    	try {
-			String[] intraUris =  ExpandoValueLocalServiceUtil.getData(
-					companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME, BookmarkConstants.EXPANDO_COLUMN_VGR_LABELED_URI, userId, new String[0]);
+    protected String[] getIntraUris(long companyId, String screenName) {
+
+        try {
+            User user = UserLocalServiceUtil.getUserByScreenName(companyId, screenName);
+
+            String[] intraUris =  ExpandoValueLocalServiceUtil.getData(
+					companyId, User.class.getName(),
+                    ExpandoTableConstants.DEFAULT_TABLE_NAME,
+                    BookmarkConstants.EXPANDO_COLUMN_VGR_LABELED_URI,
+                    user.getUserId(),
+                    new String[0]);
 			
 			return intraUris;
 		} catch (PortalException e) {

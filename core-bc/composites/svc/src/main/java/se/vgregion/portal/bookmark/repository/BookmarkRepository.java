@@ -17,7 +17,6 @@ public interface BookmarkRepository extends Repository<Bookmark, Long> {
      * Find the number of {@link Bookmark}s for a group in a company.
      *
      * @param companyId the companyid
-     * @param groupId   the groupId
      * @return an int with the number of Bookmarks
      */
     int findBookmarksCountByCompanyId(long companyId);
@@ -35,8 +34,8 @@ public interface BookmarkRepository extends Repository<Bookmark, Long> {
      * Find {@link Bookmark}s for a company.
      *
      * @param companyId the companyid
-     * @param start   start index
-     * @param end   maxIndex
+     * @param start     start index
+     * @param offset    offset
      * @return a {@link List} of {@link Bookmark}s
      */
     List<Bookmark> findBookmarksByCompanyId(long companyId, int start, int offset);
@@ -65,8 +64,8 @@ public interface BookmarkRepository extends Repository<Bookmark, Long> {
      *
      * @param companyId the companyid
      * @param groupId   the groupId
-     * @param start   start index
-     * @param end   maxIndex
+     * @param start     start index
+     * @param offset    offset
      * @return a {@link List} of {@link Bookmark}s
      */
     List<Bookmark> findBookmarksByGroupId(long companyId, long groupId, int start, int offset);
@@ -76,10 +75,10 @@ public interface BookmarkRepository extends Repository<Bookmark, Long> {
      *
      * @param companyId the companyid
      * @param groupId   the groupId
-     * @param userId   the userId 
+     * @param screenName   the screenName
      * @return an int with the number of Bookmarks
      */
-    int findUserBookmarksCount(long companyId, long groupId, long userId);
+    int findUserBookmarksCount(long companyId, long groupId, String screenName);
     
 
     /**
@@ -87,22 +86,22 @@ public interface BookmarkRepository extends Repository<Bookmark, Long> {
      *
      * @param companyId the companyid
      * @param groupId   the groupId
-     * @param userId   the userId 
+     * @param screenName   the screenName
      * @return a {@link List} of {@link Bookmark}s
      */
-    List<Bookmark> findUserBookmarks(long companyId, long groupId, long userId);
+    List<Bookmark> findUserBookmarks(long companyId, long groupId, String screenName);
     
     /**
      * Find {@link Bookmark}s for a user in a group in a company.
      *
-     * @param companyId the companyid
-     * @param groupId   the groupId
-     * @param userId   the userId 
-     * @param start   start index
-     * @param end   maxIndex
+     * @param companyId     the companyid
+     * @param groupId       the groupId
+     * @param screenName    the screenName
+     * @param start         start index
+     * @param offset        offset
      * @return a {@link List} of {@link Bookmark}s
      */
-    List<Bookmark> findUserBookmarks(long companyId, long groupId, long userId , int start, int offset);
+    List<Bookmark> findUserBookmarks(long companyId, long groupId, String screenName, int start, int offset);
     
     /**
      * Remove the {@link Bookmark} with the id

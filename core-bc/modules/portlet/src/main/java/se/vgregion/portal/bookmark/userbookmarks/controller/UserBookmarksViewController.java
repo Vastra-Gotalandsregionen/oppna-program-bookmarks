@@ -1,12 +1,8 @@
 package se.vgregion.portal.bookmark.userbookmarks.controller;
 
-import java.util.List;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +11,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
 import se.vgregion.portal.bookmark.domain.jpa.Bookmark;
 import se.vgregion.portal.bookmark.domain.util.pageiterator.PageIterator;
 import se.vgregion.portal.bookmark.domain.util.pageiterator.PageIteratorConstants;
@@ -23,10 +18,11 @@ import se.vgregion.portal.bookmark.exception.CreateBookmarkException;
 import se.vgregion.portal.bookmark.exception.UpdateBookmarkException;
 import se.vgregion.portal.bookmark.service.BookmarkService;
 
-import com.liferay.portal.kernel.util.DateUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.theme.ThemeDisplay;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import java.util.List;
 
 /**
  * Controller class for the view mode in User Bookmarks portlet.
@@ -65,7 +61,7 @@ public class UserBookmarksViewController {
     	ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         long scopeGroupId = themeDisplay.getScopeGroupId();
         long companyId = themeDisplay.getCompanyId();
-        long userId = themeDisplay.getUserId();
+        String screenName = themeDisplay.getUser().getScreenName();
         boolean isSignedIn = themeDisplay.isSignedIn();
         
         int currentPage = ParamUtil.getInteger(request, "pageNumber", PageIteratorConstants.PAGINATOR_START_DEFAULT);
@@ -75,9 +71,9 @@ public class UserBookmarksViewController {
         
         int start = (currentPage - 1) * pageSize;
         
-        List<Bookmark> vgrBookmarks = bookmarkService.findVgrBookmarksForUser(companyId, userId);
-        List<Bookmark> customBookmarks = bookmarkService.findUserBookmarks(companyId, scopeGroupId, userId, start, pageSize);
-        totalCount = bookmarkService.findUserBookmarksCount(companyId, scopeGroupId, userId);
+        List<Bookmark> vgrBookmarks = bookmarkService.findVgrBookmarksForUser(companyId, screenName);
+        List<Bookmark> customBookmarks = bookmarkService.findUserBookmarks(companyId, scopeGroupId, screenName, start, pageSize);
+        totalCount = bookmarkService.findUserBookmarksCount(companyId, scopeGroupId, screenName);
         
         PageIterator pageIterator = new PageIterator(totalCount, currentPage, pageSize, maxPages);
         pageIterator.setShowFirst(false);
@@ -133,7 +129,7 @@ public class UserBookmarksViewController {
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         long companyId = themeDisplay.getCompanyId();
         long groupId = themeDisplay.getScopeGroupId();
-        long userId = themeDisplay.getUserId();
+        String screenName = themeDisplay.getUser().getScreenName();
         
         String title = ParamUtil.getString(request, "title", "");
         String url = ParamUtil.getString(request, "url", "");
@@ -147,7 +143,7 @@ public class UserBookmarksViewController {
         }
         
         if(bookmarkId == 0) {
-            Bookmark bookmark = new Bookmark(companyId, groupId, userId, title, url, description);
+            Bookmark bookmark = new Bookmark(companyId, groupId, screenName, title, url, description);
             
             try {
     			bookmarkService.addBookmark(bookmark);

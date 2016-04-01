@@ -82,9 +82,9 @@ public interface BookmarkService {
     /**
      * Find all {@link Bookmark} for a given company and group.
      *
-     * @param companyId the companyId
-     * @param start   start index
-     * @param end   maxIndex 
+     * @param companyId     the companyId
+     * @param currentPage   currentPage
+     * @param offset        offset
  	 *
      * @return all {@link Bookmark} for the given company and group
      */
@@ -95,42 +95,45 @@ public interface BookmarkService {
      *
      * @param companyId the companyid
      * @param groupId   the groupId
-     * @param userId   the userId 
+     * @param screenName   the userId
      * @return an int with the number of Bookmarks
      */
-    int findUserBookmarksCount(long companyId, long groupId, long userId);
+    int findUserBookmarksCount(long companyId, long groupId, String screenName);
     
 
     /**
      * Find all {@link Bookmark}s for a user in a group in a company.
      *
+     *
+     * @param id
      * @param companyId the companyid
+     * @param screenName
      * @param groupId   the groupId
-     * @param userId   the userId 
+     * @param screenName   the screenName
      * @return a {@link List} of {@link Bookmark}s
      */
-    List<Bookmark> findUserBookmarks(long companyId, long groupId, long userId);
+    List<Bookmark> findUserBookmarks(long id, long companyId, String screenName, long groupId);
     
     /**
      * Find {@link Bookmark}s for a user in a group in a company.
      *
      * @param companyId the companyid
      * @param groupId   the groupId
-     * @param userId   the userId 
+     * @param screenName   the screenName
      * @param start   start index
-     * @param end   maxIndex
+     * @param offset   offset
      * @return a {@link List} of {@link Bookmark}s
      */
-    List<Bookmark> findUserBookmarks(long companyId, long groupId, long userId , int start, int offset);
+    List<Bookmark> findUserBookmarks(long companyId, long groupId, String screenName, int start, int offset);
     
     /**
      * Find all {@link Bookmark}s for a user in a group in a company.
      *
      * @param companyId the companyid
-     * @param userId   the userId 
+     * @param screenName   the userId
      * @return a {@link List} of {@link Bookmark}s
      */
-    List<Bookmark> findVgrBookmarksForUser(long companyId, long userId);
+    List<Bookmark> findVgrBookmarksForUser(long companyId, String screenName);
     
     
 

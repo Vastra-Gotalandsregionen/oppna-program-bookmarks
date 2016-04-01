@@ -116,15 +116,15 @@ public class JpaBookmarkRepositoryImpl extends DefaultJpaRepository<Bookmark, Lo
     
     
     @Override
-    public int findUserBookmarksCount(long companyId, long groupId, long userId) {
+    public int findUserBookmarksCount(long companyId, long groupId, String screenName) {
         
         String queryString = "" 
         		+ " SELECT COUNT(DISTINCT n) FROM Bookmark n" 
         		+ " WHERE n.companyId = ?1" 
         		+ " AND n.groupId = ?2"
-        		+ " AND n.userId = ?3";
+        		+ " AND n.screenName = ?3";
         
-        Object[] queryObject = new Object[]{companyId, groupId, userId};
+        Object[] queryObject = new Object[]{companyId, groupId, screenName};
 
         int count = findCountByQuery(queryString, queryObject);
         
@@ -133,17 +133,17 @@ public class JpaBookmarkRepositoryImpl extends DefaultJpaRepository<Bookmark, Lo
     
 
     @Override
-    public List<Bookmark> findUserBookmarks(long companyId, long groupId, long userId) {
+    public List<Bookmark> findUserBookmarks(long companyId, long groupId, String screenName) {
         
         String queryString = "" 
         		+ " SELECT DISTINCT n FROM Bookmark n" 
         		+ " WHERE n.companyId = ?1" 
         		+ " AND n.groupId = ?2"
-        		+ " AND n.userId = ?3"
+        		+ " AND n.screenName = ?3"
         		+ " ORDER BY n.id ASC";
         
 
-        Object[] queryObject = new Object[]{companyId, groupId, userId};
+        Object[] queryObject = new Object[]{companyId, groupId, screenName};
         
         List bookmarks = findByQuery(queryString, queryObject);
         
@@ -151,17 +151,17 @@ public class JpaBookmarkRepositoryImpl extends DefaultJpaRepository<Bookmark, Lo
     }
     
     @Override
-    public List<Bookmark> findUserBookmarks(long companyId, long groupId, long userId, int start, int offset) {
+    public List<Bookmark> findUserBookmarks(long companyId, long groupId, String screenName, int start, int offset) {
         
         String queryString = "" 
         		+ " SELECT DISTINCT n FROM Bookmark n" 
         		+ " WHERE n.companyId = ?1" 
         		+ " AND n.groupId = ?2"
-        		+ " AND n.userId = ?3"
+        		+ " AND n.screenName = ?3"
         		+ " ORDER BY n.id ASC";
         
 
-        Object[] queryObject = new Object[]{companyId, groupId, userId};
+        Object[] queryObject = new Object[]{companyId, groupId, screenName};
         
         List bookmarks = findByPagedQuery(queryString, queryObject, start, offset);
         
